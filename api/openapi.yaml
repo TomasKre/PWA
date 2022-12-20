@@ -1,0 +1,365 @@
+openapi: 3.0.3
+info:
+  title: Chat App PWA 2022
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.1.0
+servers:
+- url: /
+tags:
+- name: message
+  description: Messages
+- name: group
+  description: Group conversation IDs (also for 1 or 2 users)
+- name: user
+  description: User manipulation
+paths:
+  /message/{groupId}:
+    get:
+      tags:
+      - message
+      summary: Get messages
+      operationId: getMessages
+      parameters:
+      - name: groupId
+        in: path
+        description: ID of group conversation from where to get messages
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+                x-content-type: application/json
+        "400":
+          description: Invalid input
+      x-swagger-router-controller: Message
+  /message:
+    post:
+      tags:
+      - message
+      summary: Post message to conversation
+      operationId: postMessage
+      requestBody:
+        description: Send message
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "405":
+          description: Invalid input
+      x-swagger-router-controller: Message
+  /group:
+    get:
+      tags:
+      - group
+      summary: Get group
+      operationId: getGroup
+      parameters:
+      - name: userId
+        in: query
+        description: ID of user
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: ID of requested group
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: Invalid input
+      x-swagger-router-controller: Group
+    post:
+      tags:
+      - group
+      summary: Start group
+      operationId: postGroup
+      parameters:
+      - name: userId
+        in: query
+        description: ID of user
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Name of requested group
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: Invalid input
+      x-swagger-router-controller: Group
+  /group/{groupId}:
+    get:
+      tags:
+      - group
+      summary: Get all groups
+      operationId: getAllGroups
+      parameters:
+      - name: groupId
+        in: query
+        description: ID of user
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+                x-content-type: application/json
+        "400":
+          description: Invalid input
+      x-swagger-router-controller: Group
+  /user:
+    post:
+      tags:
+      - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-swagger-router-controller: User
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: Invalid username/password supplied
+      x-swagger-router-controller: User
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      responses:
+        default:
+          description: successful operation
+      x-swagger-router-controller: User
+  /user/{userId}/upload:
+    post:
+      tags:
+      - user
+      summary: uploads an image
+      description: ""
+      operationId: uploadFile
+      parameters:
+      - name: userId
+        in: path
+        description: ID of user
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      - name: additionalMetadata
+        in: query
+        description: Additional Metadata
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      x-swagger-router-controller: User
+  /user/{username}:
+    get:
+      tags:
+      - user
+      summary: Get user by user name
+      operationId: getUserByName
+      parameters:
+      - name: username
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid username supplied
+        "404":
+          description: User not found
+      x-swagger-router-controller: User
+components:
+  schemas:
+    User:
+      required:
+      - email
+      - firstName
+      - lastName
+      - password
+      - username
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      example:
+        firstName: firstName
+        lastName: lastName
+        password: ""
+        email: ""
+        username: username
+    Message:
+      type: object
+      properties:
+        group_id:
+          type: string
+        from_id:
+          type: string
+        text:
+          type: string
+        datetime:
+          type: string
+          format: date-time
+      example:
+        datetime: 2000-01-23T04:56:07.000+00:00
+        from_id: 1561fead5...
+        text: text
+        group_id: 1561fead5...
+    Group:
+      type: object
+      properties:
+        group_id:
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+      example:
+        code: 0
+        message: message

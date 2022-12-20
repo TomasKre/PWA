@@ -1,0 +1,27 @@
+{
+  "name": "pwa-heroku",
+  "version": "1.0.0",
+  "description": "Testing Heroku deploy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "heroku",
+    "pwa",
+	"swagger"
+  ],
+  "author": "tomas-krechler",
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "mongodb": "^4.12.1",
+    "oas3-tools": "^2.2.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
