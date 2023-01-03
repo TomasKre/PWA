@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Message = require('../service/MessageService');
 
-module.exports.getMessages = function getMessages (req, res, next, groupId) {
-  Message.getMessages(groupId)
+exports.getMessages = function getMessages (req, res, next) {
+  Message.getMessages(req.params.groupId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.getMessages = function getMessages (req, res, next, groupId) {
     });
 };
 
-module.exports.postMessage = function postMessage (req, res, next, body) {
-  Message.postMessage(body)
+exports.postMessage = function postMessage (req, res, next) {
+  Message.postMessage(req.body)
     .then(function (response) {
       utils.writeJson(res, response);
     })

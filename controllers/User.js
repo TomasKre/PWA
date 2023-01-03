@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var User = require('../service/UserService');
 
-module.exports.createUser = function createUser (req, res, next, body) {
-  User.createUser(body)
+exports.createUser = function createUser (req, res, next) {
+  User.createUser(req.body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUser = function createUser (req, res, next, body) {
     });
 };
 
-module.exports.getUserByName = function getUserByName (req, res, next, username) {
-  User.getUserByName(username)
+exports.getUserByName = function getUserByName (req, res, next) {
+  User.getUserByName(req.params.name)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.getUserByName = function getUserByName (req, res, next, username)
     });
 };
 
-module.exports.loginUser = function loginUser (req, res, next, username, password) {
-  User.loginUser(username, password)
+exports.loginUser = function loginUser (req, res, next) {
+  User.loginUser(req.body.username, req.body.password)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,7 +33,7 @@ module.exports.loginUser = function loginUser (req, res, next, username, passwor
     });
 };
 
-module.exports.logoutUser = function logoutUser (req, res, next) {
+exports.logoutUser = function logoutUser (req, res, next) {
   User.logoutUser()
     .then(function (response) {
       utils.writeJson(res, response);
@@ -43,8 +43,8 @@ module.exports.logoutUser = function logoutUser (req, res, next) {
     });
 };
 
-module.exports.uploadFile = function uploadFile (req, res, next, body, additionalMetadata, userId) {
-  User.uploadFile(body, additionalMetadata, userId)
+exports.uploadFile = function uploadFile (req, res, next) {
+  User.uploadFile(req.body, additionalMetadata, userId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

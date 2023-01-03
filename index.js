@@ -1,39 +1,36 @@
-'use strict';
+const express = require('express');
+const cors = require('cors');
+const app = express();
 
-var express = require('express')
-var path = require('path');
-var http = require('http');
-var cors = require('cors');
-
-var oas3Tools = require('oas3-tools');
 var serverPort = (process.env.PORT || 5000);
 
-// swaggerRouter configuration
-var options = {
-    routing: {
-        controllers: path.join(__dirname, './controllers')
-    },
-};
+const userController = require('./controllers/user');
+const groupController = require('./controllers/group');
+const messageController = require('./controllers/message');
 
-var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
-var app = expressAppConfig.getApp();
+app.use(cors());
 
-// Initialize the Swagger middleware
-http.createServer(app.use(cors({
-    origin: true, //Boolean - set origin to true to reflect the request origin,
-	//as defined by req.header('Origin'), or set it to false to disable CORS.
+app.use(express.json());
 
-    credentials: false, // This MUST be "true" if your endpoint is
-                       // authenticated via either a session cookie
-                       // or Authorization header. Otherwise the
-                       // browser will block the response.
-
-    methods: ['POST', 'GET', 'PUT', 'OPTIONS', 'DELETE', 'PATCH'], // Make sure you're not blocking
-                                           // pre-flight OPTIONS requests
-	allowedHeaders: '*',
-	optionsSuccessStatus: 200
-}));).listen(serverPort, function () {
-    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+app.get('/', function(req, res) {
+  res.send('Hello World!');
 });
 
+// User routes
+app.get('/user/login', userController.loginUser);
+app.get('/user/logout', userController.logoutUser);
+app.get('/user/:name', userController.getUserByName);
+app.post('/user', userController.createUser);
+
+// Group routes
+app.get('/group', groupController.getGroup);
+app.get('/group/:userId', groupController.getAllGroups);
+app.post('/group', groupController.postGroup);
+
+// Message routes
+app.get('/messages/:groupId', messageController.getMessages);
+app.post('/messages', messageController.postMessage);
+
+app.listen(serverPort, function() {
+  console.log('Express server listening on port ' + serverPort);
+});
