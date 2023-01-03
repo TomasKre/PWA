@@ -18,9 +18,8 @@ var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/open
 var app = expressAppConfig.getApp();
 //app.options('*', cors()); // pro pre-flight dotazy?
 app.use(cors({
-    origin: true, // "true" will copy the domain of the request back
-                  // to the reply. If you need more control than this
-                  // use a function.
+    origin: false, //Boolean - set origin to true to reflect the request origin,
+	//as defined by req.header('Origin'), or set it to false to disable CORS.
 
     credentials: true, // This MUST be "true" if your endpoint is
                        // authenticated via either a session cookie
