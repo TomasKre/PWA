@@ -2,9 +2,10 @@
 
 var path = require('path');
 var http = require('http');
+var cors = require('cors');
 
 var oas3Tools = require('oas3-tools');
-var serverPort = 5000;
+var serverPort = (process.env.PORT || 5000);
 
 // swaggerRouter configuration
 var options = {
@@ -15,9 +16,13 @@ var options = {
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
+app.use(cors({
+    origin: '*',
+	methods: ['GET', 'POST']
+}));
 
 // Initialize the Swagger middleware
-http.createServer(app).listen((process.env.PORT || serverPort), function () {
+http.createServer(app).listen(serverPort, function () {
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
 });

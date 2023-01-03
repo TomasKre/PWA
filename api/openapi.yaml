@@ -134,14 +134,14 @@ paths:
         "400":
           description: Invalid input
       x-swagger-router-controller: Group
-  /group/{groupId}:
+  /group/{userId}:
     get:
       tags:
       - group
       summary: Get all groups
       operationId: getAllGroups
       parameters:
-      - name: groupId
+      - name: userId
         in: query
         description: ID of user
         required: true
