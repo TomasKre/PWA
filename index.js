@@ -4,9 +4,9 @@ const app = express();
 
 var serverPort = (process.env.PORT || 5000);
 
-const userController = require('./controllers/user');
-const groupController = require('./controllers/group');
-const messageController = require('./controllers/message');
+const userController = require('./controllers/User');
+const groupController = require('./controllers/Group');
+const messageController = require('./controllers/Message');
 
 app.use(cors());
 
