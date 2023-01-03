@@ -23,7 +23,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(cors({
-    origin: true, //Boolean - set origin to true to reflect the request origin,
+    origin: false, //Boolean - set origin to true to reflect the request origin,
 	//as defined by req.header('Origin'), or set it to false to disable CORS.
 
     credentials: false, // This MUST be "true" if your endpoint is
