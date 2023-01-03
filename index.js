@@ -29,7 +29,7 @@ app.use(cors({
 
     methods: ['POST', 'GET', 'PUT', 'OPTIONS', 'DELETE', 'PATCH'], // Make sure you're not blocking
                                            // pre-flight OPTIONS requests
-	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', '*'],
+	allowedHeaders: '*',
 	optionsSuccessStatus: 200
 }));
 
