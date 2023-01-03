@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-/*app.use(cors({
+app.use(cors({
     origin: false, //Boolean - set origin to true to reflect the request origin,
 	//as defined by req.header('Origin'), or set it to false to disable CORS.
 
@@ -49,7 +49,7 @@ app.use(function (req, res, next) {
                                            // pre-flight OPTIONS requests
 	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', '*'],
 	optionsSuccessStatus: 200
-}));*/
+}));
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
