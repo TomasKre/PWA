@@ -138,15 +138,13 @@ paths:
     get:
       tags:
       - group
-      summary: Get all groups
+      summary: Get all groups for user
       operationId: getAllGroups
       parameters:
       - name: userId
-        in: query
+        in: path
         description: ID of user
         required: true
-        style: form
-        explode: true
         schema:
           type: string
       responses:
