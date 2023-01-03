@@ -16,7 +16,7 @@ var options = {
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
-app.options('*', cors()); // pro pre-flight dotazy?
+//app.options('*', cors()); // pro pre-flight dotazy?
 app.use(cors({
     origin: true, // "true" will copy the domain of the request back
                   // to the reply. If you need more control than this
