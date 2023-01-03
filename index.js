@@ -17,8 +17,26 @@ var options = {
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
 //app.options('*', cors()); // pro pre-flight dotazy?
+// Add headers
+app.use(function (req, res, next) {
 
-app.use(cors({
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+/*app.use(cors({
     origin: false, //Boolean - set origin to true to reflect the request origin,
 	//as defined by req.header('Origin'), or set it to false to disable CORS.
 
@@ -31,12 +49,7 @@ app.use(cors({
                                            // pre-flight OPTIONS requests
 	allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', '*'],
 	optionsSuccessStatus: 200
-}));
-/*app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "");
-  next();
-});*/
+}));*/
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
