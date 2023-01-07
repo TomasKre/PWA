@@ -4,7 +4,7 @@ var utils = require('../utils/writer.js');
 var Group = require('../service/GroupService');
 
 exports.getGroup = function getGroup (req, res, next) {
-  Group.getGroup(req.query.userId, req.query.name)
+  Group.getGroup(req.query.username, req.query.name)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -14,7 +14,7 @@ exports.getGroup = function getGroup (req, res, next) {
 };
 
 exports.getAllGroups = function getGroup (req, res, next) {
-  Group.getAllGroups(req.params.userId)
+  Group.getAllGroups(req.params.username)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -24,7 +24,7 @@ exports.getAllGroups = function getGroup (req, res, next) {
 };
 
 exports.postGroup = function postGroup (req, res, next) {
-  Group.postGroup(userId, name)
+  Group.postGroup(req.body.username, req.body.name)
     .then(function (response) {
       utils.writeJson(res, response);
     })

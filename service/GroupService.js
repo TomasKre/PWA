@@ -10,13 +10,12 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
  * userId String ID of user
  * returns array of Groups
  **/
-exports.getAllGroups = function(userId) {
+exports.getAllGroups = function(username) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
       if (err) throw err;
-      var userIdObj = new ObjectId(userId) 
       var db = client.db("pwa");
-      db.collection("groups").find({user_id: userIdObj}, {})
+      db.collection("groups").find({ usernames: username }, {})
       .toArray(function(err, result) {
         if (err) throw err;
         client.close();
@@ -34,13 +33,12 @@ exports.getAllGroups = function(userId) {
  * name String ID of requested group
  * returns String
  **/
-exports.getGroup = function(userId, name) {
+exports.getGroup = function(username, name) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
       if (err) throw err;
-      var userIdObj = new ObjectId(userId) 
       var db = client.db("pwa");
-      db.collection("groups").find({user_id: userIdObj, name: name}, {})
+      db.collection("groups").find({ usernames: username, name: name }, {})
       .toArray(function(err, result) {
         if (err) throw err;
         client.close();
@@ -58,13 +56,12 @@ exports.getGroup = function(userId, name) {
  * name String Name of requested group
  * returns String
  **/
-exports.postGroup = function(userId, name) {
+exports.postGroup = function(username, name) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
       if (err) throw err;
-      userId = new ObjectId(userId) 
       var db = client.db("pwa");
-      var body = { user_id: userId, name: name };
+      var body = { usernames: username, name: name };
       db.collection("groups").insertOne(body, function(err, res) {
         if (err) throw err;
         client.close();
