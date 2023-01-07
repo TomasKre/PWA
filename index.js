@@ -24,7 +24,7 @@ app.post('/user', userController.createUser);
 
 // Group routes
 app.get('/group', groupController.getGroup);
-app.get('/group/:userId', groupController.getAllGroups);
+app.get('/group/:username', groupController.getAllGroups);
 app.post('/group', groupController.postGroup);
 
 // Message routes
