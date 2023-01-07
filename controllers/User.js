@@ -4,12 +4,14 @@ var utils = require('../utils/writer.js');
 var User = require('../service/UserService');
 
 exports.createUser = function createUser (req, res, next) {
-  User.createUser(req.body)
+  User.createUser(req.body.username, req.body.password, req.body.email, req.body.firstName, req.body.lastName)
     .then(function (response) {
-      utils.writeJson(res, response);
+      var responseObject = {code: response, message: "User signed up"}
+      utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      var responseObject = {code: response, message: "Error when signing up"}
+      utils.writeJson(res, responseObject);
     });
 };
 
@@ -26,15 +28,25 @@ exports.getUserByName = function getUserByName (req, res, next) {
 exports.loginUser = function loginUser (req, res, next) {
   User.loginUser(req.body.username, req.body.password)
     .then(function (response) {
-      utils.writeJson(res, response);
+      console.log(response);
+      var responseObject = {code: response, message: "User logged in"}
+      utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      console.log(response);
+      if (response == 500) {
+        var responseObject = {code: response, message: "Error logging in"}
+      } else if (response == 404) {
+        var responseObject = {code: response, message: "User doesn't exist"}
+      } else if (response == 401) {
+        var responseObject = {code: response, message: "Wrong password"}
+      }
+      utils.writeJson(res, responseObject);
     });
 };
 
 exports.logoutUser = function logoutUser (req, res, next) {
-  User.logoutUser()
+  User.logoutUser(req.body.username)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -44,7 +56,7 @@ exports.logoutUser = function logoutUser (req, res, next) {
 };
 
 exports.uploadFile = function uploadFile (req, res, next) {
-  User.uploadFile(req.body, additionalMetadata, userId)
+  User.uploadFile(req.body.username, req.body.img)
     .then(function (response) {
       utils.writeJson(res, response);
     })

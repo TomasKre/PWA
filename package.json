@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	    "prestart": "npm install",
+    "prestart": "npm install",
     "start": "node index.js"
   },
   "author": "Tomas Krechler",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongodb": "^4.13.0"

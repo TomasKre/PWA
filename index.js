@@ -17,10 +17,10 @@ app.get('/', function(req, res) {
 });
 
 // User routes
-app.get('/user/login', userController.loginUser);
+app.post('/user/login', userController.loginUser);
 app.get('/user/logout', userController.logoutUser);
 app.get('/user/:name', userController.getUserByName);
-app.post('/user', userController.createUser);
+app.post('/user/signup', userController.createUser);
 
 // Group routes
 app.get('/group', groupController.getGroup);

@@ -1,4 +1,5 @@
 'use strict';
+const bcrypt = require('bcryptjs');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://admin:Vy9JeMCBgYBw4TqE@cluster0.x6q3yzc.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -9,16 +10,21 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
  * body User Created user object (optional)
  * returns User
  **/
-exports.createUser = function(body) {
+exports.createUser = function(username, password, email, firstName, lastName) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
       if (err) throw err;
-      delete body.id;
+      console.log(password);
+      const hashedPassword = bcrypt.hashSync(password);
+      console.log(hashedPassword);
       var db = client.db("pwa");
-      db.collection("users").insertOne(body, function(err, res) {
-        if (err) throw err;
+      db.collection("users").insertOne({ username, firstName, lastName, email, password: hashedPassword }, (err, result) => {
         client.close();
-        resolve();
+        if (err) {
+          console.error(err);
+          reject(400);
+        }
+        resolve(200);
       });
     });
   });
@@ -36,11 +42,11 @@ exports.getUserByName = function(username) {
     client.connect(err => {
       if (err) throw err;
       var db = client.db("pwa");
-      db.collection("users").find({username: username}, {})
+      db.collection("users").findOne({username: username}, {})
       .toArray(function(err, result) {
         if (err) throw err;
         client.close();
-        resolve(result[0]);
+        resolve(result);
       });
     });
   });
@@ -56,7 +62,24 @@ exports.getUserByName = function(username) {
  **/
 exports.loginUser = function(username, password) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    client.connect(err => {
+      if (err) throw err;
+      var db = client.db("pwa");
+      db.collection("users").findOne({ username }, (err, user) => {
+        client.close();
+        if (err) {
+          console.error(err);
+          reject(500);
+        }
+        if (!user) {
+          reject(404);
+        }
+        if (!bcrypt.compareSync(password, user.password)) {
+          reject(401);
+        }
+        resolve(200);
+      });
+    });
   });
 }
 
@@ -68,7 +91,7 @@ exports.loginUser = function(username, password) {
  **/
 exports.logoutUser = function() {
   return new Promise(function(resolve, reject) {
-    resolve();
+    resolve(200);
   });
 }
 
@@ -83,16 +106,6 @@ exports.logoutUser = function() {
  **/
 exports.uploadFile = function(body,additionalMetadata,userId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "code" : 0,
-  "message" : "message"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    resolve(200);
   });
 }
-
