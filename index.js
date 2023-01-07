@@ -28,8 +28,8 @@ app.get('/group/:username', groupController.getAllGroups);
 app.post('/group', groupController.postGroup);
 
 // Message routes
-app.get('/messages/:groupId', messageController.getMessages);
-app.post('/messages', messageController.postMessage);
+app.get('/message/:groupId', messageController.getMessages);
+app.post('/message', messageController.postMessage);
 
 app.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);

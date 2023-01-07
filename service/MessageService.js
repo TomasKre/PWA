@@ -16,7 +16,7 @@ exports.getMessages = function(groupId) {
       if (err) throw err;
       var groupIdObj = new ObjectId(groupId) 
       var db = client.db("pwa");
-      db.collection("messages").find({group_id: groupIdObj}, {})
+      db.collection("messages").find({group_id: groupIdObj}, {}).sort({ datetime: 1 })
       .toArray(function(err, result) {
         if (err) throw err;
         client.close();
