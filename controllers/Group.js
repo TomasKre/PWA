@@ -14,6 +14,9 @@ exports.getGroup = function getGroup (req, res, next) {
 };
 
 exports.getAllGroups = function getGroup (req, res, next) {
+  console.log(req);
+  console.log(req.params);
+  console.log(req.params.username);
   Group.getAllGroups(req.params.username)
     .then(function (response) {
       utils.writeJson(res, response);
