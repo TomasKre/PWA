@@ -15,6 +15,7 @@ exports.getAllGroups = function(username) {
     client.connect(err => {
       if (err) throw err;
       var db = client.db("pwa");
+      console.log(username);
       db.collection("groups").find({ usernames: username }, {})
       .toArray(function(err, result) {
         if (err) throw err;
