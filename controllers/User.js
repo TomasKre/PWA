@@ -1,5 +1,6 @@
 'use strict';
 
+const jwt = require("jsonwebtoken");
 var utils = require('../utils/writer.js');
 var User = require('../service/UserService');
 
