@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const { authJwt } = require("../middleware");
+const authJWT = require("./middleware/authJWT.js");
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -50,13 +50,13 @@ app.get('/user/:name', userController.getUserByName);
 app.post('/user/signup', userController.createUser);
 
 // Group routes
-app.get('/group', [authJwt.verifyToken], groupController.getGroup);
-app.get('/group/:username', [authJwt.verifyToken], groupController.getAllGroups);
-app.post('/group', [authJwt.verifyToken], groupController.postGroup);
+app.get('/group', [authJWT.verifyToken], groupController.getGroup);
+app.get('/group/:username', [authJWT.verifyToken], groupController.getAllGroups);
+app.post('/group', [authJWT.verifyToken], groupController.postGroup);
 
 // Message routes
-app.get('/message/:groupId', [authJwt.verifyToken], messageController.getMessages);
-app.post('/message', [authJwt.verifyToken], messageController.postMessage);
+app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
+app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
 server.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);

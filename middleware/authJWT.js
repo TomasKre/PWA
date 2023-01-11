@@ -1,6 +1,8 @@
+'use strict';
+
 const jwt = require("jsonwebtoken");
 
-verifyToken = (req, res, next) => {
+exports.verifyToken = function(req, res, next) {
   let token = req.session.token;
 
   if (!token) {
@@ -19,5 +21,3 @@ verifyToken = (req, res, next) => {
     next();
   });
 };
-
-module.exports = verifyToken;
