@@ -30,6 +30,13 @@ exports.loginUser = function loginUser (req, res, next) {
     .then(function (response) {
       console.log(response);
       var responseObject = {code: response, message: "User logged in"}
+
+      const token = jwt.sign({ username: req.body.username }, "PWA_very_secure11", { // secret
+        expiresIn: 86400, // 24 hours
+      });
+
+      req.session.token = token;
+
       utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
@@ -48,6 +55,7 @@ exports.loginUser = function loginUser (req, res, next) {
 exports.logoutUser = function logoutUser (req, res, next) {
   User.logoutUser(req.body.username)
     .then(function (response) {
+      req.session = null;
       utils.writeJson(res, response);
     })
     .catch(function (response) {
