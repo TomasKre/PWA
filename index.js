@@ -1,6 +1,17 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
 
 var serverPort = (process.env.PORT || 5000);
 
@@ -31,6 +42,6 @@ app.post('/group', groupController.postGroup);
 app.get('/message/:groupId', messageController.getMessages);
 app.post('/message', messageController.postMessage);
 
-app.listen(serverPort, function() {
+server.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
 });
