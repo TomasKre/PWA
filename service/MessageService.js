@@ -18,7 +18,7 @@ exports.getMessages = function(groupId) {
       var db = client.db("pwa");
       db.collection("messages").find({group_id: groupIdObj}, {}).sort({ datetime: 1 })
       .toArray(function(err, result) {
-        if (err) throw err;
+        if (err) reject(404); // test
         client.close();
         resolve(result);
       });

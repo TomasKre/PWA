@@ -8,8 +8,14 @@ const io = new Server(server);
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+
+  socket.on('message', (message) => {
+    console.log(message);
+    io.emit('message', `${socket.id} said ${message}`);
+  });
+
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('a user disconnected!');
   });
 });
 
@@ -24,7 +30,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', function(req, res) {
-  res.send('Hello World!');
+  res.send(serverPort);
 });
 
 // User routes
