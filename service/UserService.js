@@ -13,18 +13,39 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 exports.createUser = function(username, password, email, firstName, lastName) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
-      console.log(password);
-      const hashedPassword = bcrypt.hashSync(password);
-      console.log(hashedPassword);
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
-      db.collection("users").insertOne({ username, firstName, lastName, email, password: hashedPassword }, (err, result) => {
-        client.close();
+      db.collection("users").findOne({ username }, (err, user) => { //check if username exists
         if (err) {
           console.error(err);
+          reject(500);
+        }
+        if (!user) {
+          db.collection("users").findOne({ email }, (err, user) => { //check if email exists
+            if (err) {
+              console.error(err);
+              reject(500);
+            }
+            if (!user) {
+              const hashedPassword = bcrypt.hashSync(password); // hash password and create user
+              db.collection("users").insertOne({ username, firstName, lastName, email, password: hashedPassword }, (err, result) => {
+                client.close();
+                if (err) {
+                  console.error(err);
+                  reject(400);
+                }
+                resolve(200);
+              });
+            } else {
+              reject(400);
+            }
+          });
+        } else {
           reject(400);
         }
-        resolve(200);
       });
     });
   });
@@ -40,12 +61,18 @@ exports.createUser = function(username, password, email, firstName, lastName) {
 exports.getUserByName = function(username) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err)  {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
       db.collection("users").findOne({username: username}, {})
       .toArray(function(err, result) {
-        if (err) throw err;
         client.close();
+        if (err)  {
+          console.error(err);
+          reject(500);
+        }
         resolve(result);
       });
     });
@@ -63,7 +90,10 @@ exports.getUserByName = function(username) {
 exports.loginUser = function(username, password) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
       db.collection("users").findOne({ username }, (err, user) => {
         client.close();

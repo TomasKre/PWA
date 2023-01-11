@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const http = require('http');
+const cookieSession = require("cookie-session");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
@@ -28,6 +29,14 @@ const messageController = require('./controllers/Message');
 app.use(cors());
 
 app.use(express.json());
+
+app.use(
+  cookieSession({
+    name: "session",
+    secret: "PWA_very_secure11", // secret password etc.
+    httpOnly: true
+  })
+);
 
 app.get('/', function(req, res) {
   res.send(serverPort);
