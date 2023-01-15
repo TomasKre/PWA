@@ -66,9 +66,32 @@ exports.postGroup = function(username, name) {
       db.collection("groups").insertOne(body, function(err, res) {
         if (err) throw err;
         client.close();
-        resolve();
+        resolve(204);
       });
     });
   });
 }
 
+
+/**
+ * Add user to group
+ *
+ * userId String ID of user
+ * name String Name of requested group
+ * returns String
+ **/
+exports.addUserToGroup = function(groupId, username) {
+  return new Promise(function(resolve, reject) {
+    client.connect(err => {
+      if (err) throw err;
+      var db = client.db("pwa");
+      var groupIdObj = new ObjectId(groupId);
+      db.collection("groups").findOneAndUpdate({groupId: groupIdObj}, {$push: {usernames:username}},
+         null, function(err, res) {
+        if (err) throw err;
+        client.close();
+        resolve(204);
+      });
+    });
+  });
+}

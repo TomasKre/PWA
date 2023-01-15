@@ -32,3 +32,13 @@ exports.postGroup = function postGroup (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+exports.addUserToGroup = function postGroup (req, res, next) {
+  Group.postGroup(req.body.groupId, req.body.username)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
