@@ -3,7 +3,7 @@
 const jwt = require("jsonwebtoken");
 
 exports.verifyToken = function(req, res, next) {
-  let token = req.session.token;
+  let token = req.headers.session;
 
   if (!token) {
     return res.status(403).send({
