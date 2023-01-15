@@ -14,7 +14,7 @@ exports.getGroup = function getGroup (req, res, next) {
       } else if (response == 400) {
         var responseObject = {code: response, message: "Error getting group"}
       }
-      utils.writeJson(res, response);
+      utils.writeJson(res, responseObject);
     });
 };
 
@@ -29,7 +29,7 @@ exports.getAllGroups = function getGroup (req, res, next) {
       } else if (response == 400) {
         var responseObject = {code: response, message: "Error getting groups"}
       }
-      utils.writeJson(res, response);
+      utils.writeJson(res, responseObject);
     });
 };
 
@@ -53,7 +53,7 @@ exports.addUserToGroup = function postGroup (req, res, next) {
   Group.postGroup(req.body.groupId, req.body.username)
     .then(function (response) {
       var responseObject = {code: response, message: "User added"}
-      utils.writeJson(res, response);
+      utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
       if (response == 500) {
@@ -61,6 +61,6 @@ exports.addUserToGroup = function postGroup (req, res, next) {
       } else if (response == 400) {
         var responseObject = {code: response, message: "Error adding user to group"}
       }
-      utils.writeJson(res, response);
+      utils.writeJson(res, responseObject);
     });
 };
