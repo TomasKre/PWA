@@ -3,8 +3,8 @@
 const jwt = require("jsonwebtoken");
 
 exports.verifyToken = function(req, res, next) {
-  let token = req.headers.session;
 
+  let token = req.header('Session');
   if (!token) {
     return res.status(403).send({
       message: "No JWT token!",
