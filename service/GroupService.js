@@ -108,7 +108,7 @@ exports.addUserToGroup = function(groupId, username) {
       }
       var db = client.db("pwa");
       var groupIdObj = new ObjectId(groupId);
-      db.collection("groups").findOneAndUpdate({groupId: groupIdObj}, {$push: {usernames:username}},
+      db.collection("groups").findOneAndUpdate({_id: groupIdObj}, {$push: {usernames:username}},
          null, function(err, res) {
           client.close();
           if (err) {
