@@ -53,7 +53,7 @@ app.post('/user/signup', userController.createUser);
 app.get('/group', [authJWT.verifyToken], groupController.getGroup);
 app.get('/group/:username', [authJWT.verifyToken], groupController.getAllGroups);
 app.post('/group', [authJWT.verifyToken], groupController.postGroup);
-app.post('/group/addUser', [authJWT.verifyToken], groupController.postGroup);
+app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup);
 
 // Message routes
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);

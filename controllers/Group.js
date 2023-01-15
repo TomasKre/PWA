@@ -52,6 +52,7 @@ exports.postGroup = function postGroup (req, res, next) {
 exports.addUserToGroup = function postGroup (req, res, next) {
   Group.postGroup(req.body.groupId, req.body.username)
     .then(function (response) {
+      var responseObject = {code: response, message: "User added"}
       utils.writeJson(res, response);
     })
     .catch(function (response) {
