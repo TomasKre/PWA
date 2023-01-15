@@ -9,6 +9,11 @@ exports.getGroup = function getGroup (req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
+      if (response == 500) {
+        var responseObject = {code: response, message: "Error connecting to db"}
+      } else if (response == 400) {
+        var responseObject = {code: response, message: "Error getting group"}
+      }
       utils.writeJson(res, response);
     });
 };
@@ -19,6 +24,11 @@ exports.getAllGroups = function getGroup (req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
+      if (response == 500) {
+        var responseObject = {code: response, message: "Error connecting to db"}
+      } else if (response == 400) {
+        var responseObject = {code: response, message: "Error getting groups"}
+      }
       utils.writeJson(res, response);
     });
 };
@@ -26,10 +36,16 @@ exports.getAllGroups = function getGroup (req, res, next) {
 exports.postGroup = function postGroup (req, res, next) {
   Group.postGroup(req.body.username, req.body.name)
     .then(function (response) {
-      utils.writeJson(res, response);
+      var responseObject = {code: response, message: "Group created"}
+      utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      if (response == 500) {
+        var responseObject = {code: response, message: "Error connecting to db"}
+      } else if (response == 400) {
+        var responseObject = {code: response, message: "Error creating group"}
+      }
+      utils.writeJson(res, responseObject);
     });
 };
 
@@ -39,6 +55,11 @@ exports.addUserToGroup = function postGroup (req, res, next) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
+      if (response == 500) {
+        var responseObject = {code: response, message: "Error connecting to db"}
+      } else if (response == 400) {
+        var responseObject = {code: response, message: "Error adding user to group"}
+      }
       utils.writeJson(res, response);
     });
 };

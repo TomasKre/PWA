@@ -13,13 +13,19 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 exports.getAllGroups = function(username) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
       console.log(username);
       db.collection("groups").find({ usernames: username }, {})
       .toArray(function(err, result) {
-        if (err) throw err;
         client.close();
+        if (err) {
+          console.error(err);
+          reject(400);
+        }
         resolve(result);
       });
     });
@@ -37,12 +43,18 @@ exports.getAllGroups = function(username) {
 exports.getGroup = function(username, name) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
       db.collection("groups").find({ usernames: username, name: name }, {})
       .toArray(function(err, result) {
-        if (err) throw err;
         client.close();
+        if (err) {
+          console.error(err);
+          reject(400);
+        }
         resolve(result[0]);
       });
     });
@@ -60,12 +72,19 @@ exports.getGroup = function(username, name) {
 exports.postGroup = function(username, name) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
-      var body = { usernames: username, name: name };
+      var body = { usernames: [username], name: name };
+      console.log(body);
       db.collection("groups").insertOne(body, function(err, res) {
-        if (err) throw err;
         client.close();
+        if (err) {
+          console.error(err);
+          reject(400);
+        }
         resolve(204);
       });
     });
@@ -83,13 +102,19 @@ exports.postGroup = function(username, name) {
 exports.addUserToGroup = function(groupId, username) {
   return new Promise(function(resolve, reject) {
     client.connect(err => {
-      if (err) throw err;
+      if (err) {
+        console.error(err);
+        reject(500);
+      }
       var db = client.db("pwa");
       var groupIdObj = new ObjectId(groupId);
       db.collection("groups").findOneAndUpdate({groupId: groupIdObj}, {$push: {usernames:username}},
          null, function(err, res) {
-        if (err) throw err;
-        client.close();
+          client.close();
+          if (err) {
+            console.error(err);
+            reject(400);
+          }
         resolve(204);
       });
     });
