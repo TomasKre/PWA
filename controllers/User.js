@@ -30,7 +30,7 @@ exports.loginUser = function loginUser (req, res, next) {
   User.loginUser(req.body.username, req.body.password)
     .then(function (response) {
       console.log(response);
-      var responseObject = {code: response, message: "User logged in"}
+      //var responseObject = {code: response, message: "User logged in"}
 
       const token = jwt.sign({ username: req.body.username }, "PWA_very_secure11", { // secret
         expiresIn: 86400, // 24 hours
@@ -38,7 +38,7 @@ exports.loginUser = function loginUser (req, res, next) {
 
       req.session.token = token;
 
-      utils.writeJson(res, responseObject);
+      utils.writeJson(res, token);
     })
     .catch(function (response) {
       console.log(response);
