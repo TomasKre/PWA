@@ -3,7 +3,8 @@ const cors = require('cors');
 const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
-const server = http.createServer((req, res) => {res.setHeader('Access-Control-Allow-Origin', '*');
+const server = http.createServer((req, res) => {
+res.setHeader('Access-Control-Allow-Origin', '*');
 res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
 res.setHeader('Access-Control-Max-Age', 60*60*24*30);
 });
@@ -63,6 +64,8 @@ app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
 app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
-server.listen(serverPort, function() {
+const serverExpress = http.createServer(app);
+
+serverExpress.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
 });
