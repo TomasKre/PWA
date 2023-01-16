@@ -13,6 +13,10 @@ const io = new Server(server, {cors: {origin: "*"}});
 io.on('connection', (socket) => {
   console.log('User connected');
 
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
   socket.on('message', (message) => {
     console.log(message);
     messageController.postMessageIO(message);
@@ -28,11 +32,11 @@ const userController = require('./controllers/User');
 const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
 
-app.options('*' , function (req, res, next) {
+app.use( function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader("Access-Control-Allow-Headers", "*");
-  res.end();
+  next();
 });
 
 app.use(express.json());
