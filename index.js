@@ -56,9 +56,7 @@ app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
 const server = http.createServer(app);
 
-const serverIO = http.createServer(app);
-
-const io = require("socket.io")(serverIO);
+const io = require("socket.io").listen(serverIO);
 io.on('connection', (socket) => {
   console.log('User connected');
 
