@@ -4,28 +4,30 @@ const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
+const io = require("socket.io")(server, {cors: {origin: "*"}});
 const authJWT = require("./middleware/authJWT.js");
+
+const userController = require('./controllers/User');
+const groupController = require('./controllers/Group');
+const messageController = require('./controllers/Message');
 
 io.on('connection', (socket) => {
   console.log('a user connected');
 
   socket.on('message', (message) => {
     console.log(message);
-    io.emit('message', `${socket.id} said ${message}`);
+    messageController.postMessageIO(message);
+    io.emit('message', message);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (reason) => {
     console.log('a user disconnected!');
   });
 });
 
 var serverPort = (process.env.PORT || 5000);
 
-const userController = require('./controllers/User');
-const groupController = require('./controllers/Group');
-const messageController = require('./controllers/Message');
+
 
 app.use(cors());
 

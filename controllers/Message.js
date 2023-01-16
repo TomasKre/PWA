@@ -22,3 +22,13 @@ exports.postMessage = function postMessage (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+exports.postMessageIO = function postMessage (messageBody) {
+  Message.postMessage(messageBody)
+    .then(function (response) {
+      return response;
+    })
+    .catch(function (response) {
+      return response;
+    });
+};
