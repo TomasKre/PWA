@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const http = require('http');
-const srvr = require('http').Server(app);
 const cookieSession = require("cookie-session");
 const authJWT = require("./middleware/authJWT.js");
 
@@ -10,7 +9,7 @@ var serverPort = (process.env.PORT || 5000);
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
-const io = require("socket.io")(srvr, {cors: {origin: "*"}});
+const io = Server(server, {cors: {origin: "*"}});
 console.log(io);
 io.on('connection', (socket) => {
   console.log('User connected');
