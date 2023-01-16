@@ -3,37 +3,22 @@ const cors = require('cors');
 const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
-const server = http.createServer((req, res) => {
-res.setHeader('Access-Control-Allow-Origin', '*');
-res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-res.setHeader('Access-Control-Max-Age', 60*60*24*30);
-});
-const io = require("socket.io")(server);
 const authJWT = require("./middleware/authJWT.js");
+
+var serverPort = (process.env.PORT || 5000);
 
 const userController = require('./controllers/User');
 const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
 
-console.log(io);
 
-io.on('connection', (socket) => {
-  console.log('User connected');
-
-  socket.on('message', (message) => {
-    console.log(message);
-    messageController.postMessageIO(message);
-    io.emit('message', message);
-  });
-
-  socket.on('disconnect', (reason) => {
-    console.log('User disconnected!');
-  });
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  next();
 });
 
-var serverPort = (process.env.PORT || 5000);
-
-//app.use(cors());
 app.use(express.json());
 
 app.use(
@@ -64,8 +49,29 @@ app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
 app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
-const serverExpress = http.createServer(app);
+/*const server = http.createServer((req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Max-Age', 60*60*24*30);
+  });*/
 
-serverExpress.listen(serverPort, function() {
+const server = http.createServer(app);
+
+server.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
+});
+
+const io = require("socket.io")(server);
+io.on('connection', (socket) => {
+  console.log('User connected');
+
+  socket.on('message', (message) => {
+    console.log(message);
+    messageController.postMessageIO(message);
+    io.emit('message', message);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('User disconnected!');
+  });
 });
