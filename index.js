@@ -11,6 +11,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 
 const io = require("socket.io")(srvr, {cors: {origin: "*"}});
+console.log(io);
 io.on('connection', (socket) => {
   console.log('User connected');
 
