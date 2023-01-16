@@ -3,13 +3,19 @@ const cors = require('cors');
 const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
+app.use(cors({
+  origin: "*",
+  methods: "GET,POST,OPTIONS",
+}));
 const server = http.createServer(app);
-const io = require("socket.io")(server, {cors: {origin: "*"}});
+const io = require("socket.io").listen(server);
 const authJWT = require("./middleware/authJWT.js");
 
 const userController = require('./controllers/User');
 const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
+
+console.log(io);
 
 io.on('connection', (socket) => {
   console.log('User connected');
@@ -29,7 +35,7 @@ var serverPort = (process.env.PORT || 5000);
 
 
 
-app.use(cors());
+
 
 app.use(express.json());
 
