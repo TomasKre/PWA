@@ -41,7 +41,6 @@ exports.loginUser = function loginUser (req, res, next) {
       utils.writeJson(res, responseObject);
     })
     .catch(function (response) {
-      console.log(response);
       if (response == 500) {
         var responseObject = {code: response, message: "Error logging in"}
       } else if (response == 404) {

@@ -18,7 +18,6 @@ exports.getAllGroups = function(username) {
         reject(500);
       }
       var db = client.db("pwa");
-      console.log(username);
       db.collection("groups").find({ usernames: username }, {})
       .toArray(function(err, result) {
         client.close();
@@ -78,7 +77,6 @@ exports.postGroup = function(username, name) {
       }
       var db = client.db("pwa");
       var body = { usernames: [username], name: name };
-      console.log(body);
       db.collection("groups").insertOne(body, function(err, res) {
         client.close();
         if (err) {

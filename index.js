@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
@@ -57,7 +56,9 @@ app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
 const server = http.createServer(app);
 
-const io = require("socket.io")(server);
+const serverIO = http.createServer(app);
+
+const io = require("socket.io")(serverIO);
 io.on('connection', (socket) => {
   console.log('User connected');
 
