@@ -51,7 +51,12 @@ app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
 const server = http.createServer(app);
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"]
+  }
+});
 io.on('connection', (socket) => {
   console.log('User connected');
 
