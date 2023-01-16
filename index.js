@@ -66,8 +66,6 @@ io.on('connection', (socket) => {
   });
 });
 
-io.listen(serverPort);
-
-server.listen(serverPort, function() {
+io.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
 });
