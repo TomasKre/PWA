@@ -57,10 +57,6 @@ app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
 const server = http.createServer(app);
 
-server.listen(serverPort, function() {
-  console.log('Express server listening on port ' + serverPort);
-});
-
 const io = require("socket.io")(server);
 io.on('connection', (socket) => {
   console.log('User connected');
@@ -74,4 +70,8 @@ io.on('connection', (socket) => {
   socket.on('disconnect', (reason) => {
     console.log('User disconnected!');
   });
+});
+
+server.listen(serverPort, function() {
+  console.log('Express server listening on port ' + serverPort);
 });
