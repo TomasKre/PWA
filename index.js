@@ -7,7 +7,7 @@ const server = http.createServer((req, res) => {res.setHeader('Access-Control-Al
 res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
 res.setHeader('Access-Control-Max-Age', 60*60*24*30);
 });
-const io = require("socket.io").listen(server);
+const io = require("socket.io")(server);
 const authJWT = require("./middleware/authJWT.js");
 
 const userController = require('./controllers/User');
