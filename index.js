@@ -9,7 +9,7 @@ var serverPort = (process.env.PORT || 5000);
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
-const io = Server(server, {cors: {origin: "*"}});
+const io = new Server(server, {cors: {origin: "*"}});
 console.log(io);
 io.on('connection', (socket) => {
   console.log('User connected');
