@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
 const userController = require('./controllers/User');
 const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
+const socketController = require('./controllers/Socket');
 
 app.use( function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
