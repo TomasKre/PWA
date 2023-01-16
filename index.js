@@ -69,6 +69,10 @@ app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
 app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
+// Socket IO router
+app.post('/socket.io', socketController.socket);
+app.get('/socket.io', socketController.socket);
+
 server.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
 });
