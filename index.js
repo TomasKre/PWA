@@ -3,6 +3,7 @@ const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
 const authJWT = require("./middleware/authJWT.js");
+const { Server } = require("socket.io");
 
 var serverPort = (process.env.PORT || 5000);
 
@@ -48,15 +49,9 @@ app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
 app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
-/*const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-  res.setHeader('Access-Control-Max-Age', 60*60*24*30);
-  });*/
-
 const server = http.createServer(app);
 
-const io = require("socket.io").listen(server);
+const io = new Server(server);
 io.on('connection', (socket) => {
   console.log('User connected');
 
@@ -70,6 +65,8 @@ io.on('connection', (socket) => {
     console.log('User disconnected!');
   });
 });
+
+io.listen(serverPort);
 
 server.listen(serverPort, function() {
   console.log('Express server listening on port ' + serverPort);
