@@ -3,11 +3,10 @@ const cors = require('cors');
 const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
-app.use(cors({
-  origin: "*",
-  methods: "GET,POST,OPTIONS",
-}));
-const server = http.createServer(app);
+const server = http.createServer((req, res) => {res.setHeader('Access-Control-Allow-Origin', '*');
+res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+res.setHeader('Access-Control-Max-Age', 60*60*24*30);
+});
 const io = require("socket.io").listen(server);
 const authJWT = require("./middleware/authJWT.js");
 
@@ -33,10 +32,7 @@ io.on('connection', (socket) => {
 
 var serverPort = (process.env.PORT || 5000);
 
-
-
-
-
+//app.use(cors());
 app.use(express.json());
 
 app.use(
