@@ -4,7 +4,7 @@ const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
 const server = http.createServer(app);
-const io = require("socket.io")(server, {cors: {origin: "*"}});
+const io = require("socket.io").listen(server, {cors: {origin: "*"}});
 const authJWT = require("./middleware/authJWT.js");
 
 const userController = require('./controllers/User');
@@ -12,7 +12,7 @@ const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('User connected');
 
   socket.on('message', (message) => {
     console.log(message);
@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', (reason) => {
-    console.log('a user disconnected!');
+    console.log('User disconnected!');
   });
 });
 
