@@ -3,14 +3,30 @@ const app = express();
 const http = require('http');
 const cookieSession = require("cookie-session");
 const authJWT = require("./middleware/authJWT.js");
-const { Server } = require("socket.io");
 
 var serverPort = (process.env.PORT || 5000);
+
+const { Server } = require("socket.io");
+const server = http.createServer(app);
+
+const io = new Server(server, {cors: {origin: "*"}});
+io.on('connection', (socket) => {
+  console.log('User connected');
+
+  socket.on('message', (message) => {
+    console.log(message);
+    messageController.postMessageIO(message);
+    io.emit('message', message);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log('User disconnected!');
+  });
+});
 
 const userController = require('./controllers/User');
 const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
-
 
 app.options('*' , function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -49,28 +65,6 @@ app.post('/group/addUser', [authJWT.verifyToken], groupController.addUserToGroup
 app.get('/message/:groupId', [authJWT.verifyToken], messageController.getMessages);
 app.post('/message', [authJWT.verifyToken], messageController.postMessage);
 
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: "*",
-  }
+server.listen(serverPort, function() {
+  console.log('Express server listening on port ' + serverPort);
 });
-io.on('connection', (socket) => {
-  console.log('User connected');
-
-  socket.on('message', (message) => {
-    console.log(message);
-    messageController.postMessageIO(message);
-    io.emit('message', message);
-  });
-
-  socket.on('disconnect', (reason) => {
-    console.log('User disconnected!');
-  });
-});
-
-io.listen(serverPort);
-console.log('IO Express server listening on port ' + serverPort);
