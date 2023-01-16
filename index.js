@@ -12,11 +12,11 @@ const groupController = require('./controllers/Group');
 const messageController = require('./controllers/Message');
 
 
-app.use(function (req, res, next) {
+app.options('*' , function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader("Access-Control-Allow-Headers", "*");
-  next();
+  res.end();
 });
 
 app.use(express.json());
@@ -66,6 +66,5 @@ io.on('connection', (socket) => {
   });
 });
 
-io.listen(serverPort, function() {
-  console.log('Express server listening on port ' + serverPort);
-});
+io.listen(serverPort);
+console.log('IO Express server listening on port ' + serverPort);
